@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "aplicativocaridade",
+    "slug": "aplicativocaridade",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Permissão necessária para acessar a biblioteca de mídia."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "CAMERA_ROLL"
+      ],
+      "package": "com.marcoslacerdasenai.aplicativocaridade"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "76609608-dca6-4817-bd28-03012a2efd11"
+      }
+    }
+  }
+}
