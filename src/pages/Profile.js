@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, ImageBackground, Image, Text, TouchableOpacity, ActivityIndicator, TextInput, Modal, Pressable, Linking,  } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ImageBackground, Image, Text, TouchableOpacity, ActivityIndicator, TextInput, Modal, Pressable, Linking, PermissionsAndroid } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
 import { Picker } from '@react-native-picker/picker';
@@ -77,7 +77,7 @@ const MinhaComponente = () => {
       console.error('Failed to save data', error);
     }
   };
-  
+
 
   const removeData = async () => {
     try {
@@ -97,13 +97,13 @@ const MinhaComponente = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
+  
     if (!result.cancelled) {
       setImage(result.assets[0].uri);
-      saveData(); // Move saveData para dentro do if
+      saveData(); // Salvar após selecionar nova imagem
     }
   };
-
+  
   const pickBackgroundImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -111,10 +111,10 @@ const MinhaComponente = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
+  
     if (!result.cancelled) {
       setBackgroundImage(result.assets[0].uri);
-      saveData(); // Move saveData para dentro do if
+      saveData(); // Salvar após selecionar nova imagem de fundo
     }
   };
 
@@ -173,11 +173,13 @@ const MinhaComponente = () => {
               style={[styles.input, { fontFamily: 'Poppins-Semi' }]}
               placeholder="Insira seu nome"
               placeholderTextColor="rgba(150, 150, 150, 0.5)"
-              onChangeText={(text) => setName(text)}
+              onChangeText={(text) => {
+                setName(text);
+                saveData(); // Salvar imediatamente ao digitar
+              }}
               value={name}
               textAlign="left"
               maxLength={20}
-              onBlur={saveData}
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={[styles.button]} onPress={handleButton1Press}>
@@ -202,7 +204,7 @@ const MinhaComponente = () => {
               </View>
               <View style={styles.rightContainer}>
                 <View style={styles.category}>
-                  <Text style={styles.categoryTitle}>ONGs doadas</Text>
+                  <Text style={styles.categoryTitle}>Ongs doadas</Text>
                   {ongsDoadas.map((ong, index) => (
                     <TouchableOpacity key={index} onPress={() => handleOngsDoadasPress(index)} style={styles.ongItem}>
                       <Image
@@ -236,7 +238,6 @@ const MinhaComponente = () => {
               <TouchableOpacity style={styles.modalButton} onPress={removeData}>
                 <Text style={styles.modalButtonText}>Restaurar imagens originais</Text>
               </TouchableOpacity>
-              
             </View>
           </Pressable>
         </Modal>
@@ -262,17 +263,19 @@ const MinhaComponente = () => {
         <Modal visible={editCategoria} transparent={true} animationType="slide">
           <Pressable style={styles.modalOverlay} onPress={closeModals}>
             <View style={styles.editModalContent}>
-              <Picker
-                selectedValue={categoriaFavorita}
-                onValueChange={(itemValue) => setCategoriaFavorita(itemValue)}
-                onBlur={saveData}
-              >
-                <Picker.Item label="Alimentos" value="Alimentos" />
-                <Picker.Item label="Roupas" value="Roupas" />
-                <Picker.Item label="Dinheiro" value="Dinheiro" />
-                <Picker.Item label="Brinquedos" value="Brinquedos" />
-                <Picker.Item label="Remédios" value="Remédios" />
-              </Picker>
+              <View style={styles.editInput}>
+                <TouchableOpacity onPress={() => setCategoriaFavorita('Alimentos')} style={styles.categoryOption}>
+                  <Text style={styles.categoryOptionText}>Alimentos</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setCategoriaFavorita('Roupas')} style={styles.categoryOption}>
+                  <Text style={styles.categoryOptionText}>Roupas</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setCategoriaFavorita('Dinheiro')} style={styles.categoryOption}>
+                  <Text style={styles.categoryOptionText}>Dinheiro</Text>
+                </TouchableOpacity>
+              </View>
+
+
               <TouchableOpacity onPress={closeModals}>
                 <Text style={styles.editModalCloseButton}>Fechar</Text>
               </TouchableOpacity>
@@ -283,6 +286,7 @@ const MinhaComponente = () => {
         <Modal visible={editOngs !== null} transparent={true} animationType="slide">
           <Pressable style={styles.modalOverlay} onPress={closeModals}>
             <View style={styles.editModalContent}>
+              <Text style={styles.modalTitle}>Editar Ongs Doadas</Text>
               <TextInput
                 style={styles.editInput}
                 value={tempOng}
@@ -292,6 +296,7 @@ const MinhaComponente = () => {
                   updatedOngs[editOngs] = tempOng;
                   setOngsDoadas(updatedOngs);
                   saveData();
+                  closeModals();
                 }}
               />
               <TouchableOpacity onPress={closeModals}>
@@ -439,7 +444,6 @@ const styles = StyleSheet.create({
   ongItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: 10,
   },
   arrowIcon: {
@@ -477,6 +481,42 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
   },
+  editModalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    marginBottom: 10,
+  },
+  editInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
+    fontSize: 18,
+    fontFamily: 'Poppins-Regular',
+    width: '100%',
+    marginBottom: 10,
+  },
+  editModalCloseButton: {
+    color: 'black',
+    fontFamily: 'Poppins-Medium',
+    marginTop: 10,
+  }, categoryOption: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
+    paddingVertical: 10,
+  },
+  categoryOptionText: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Regular',
+  }
+
 });
 
 export default MinhaComponente;
+
+
