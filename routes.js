@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Index from './pages/Index';
-import Profile from './pages/Profile';
+import {Index} from './pages/Index';
+import {Profile} from './pages/Profile';
 
 import { Ionicons} from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator();
 
-function Routes() {
+export function Routes() {
     return (
         <Tab.Navigator
             screenOptions={{
@@ -28,7 +28,7 @@ function Routes() {
             }}
         >
             <Tab.Screen
-                name="Início"
+                name="Index"
                 component={Index}
                 options={{
                     headerShown: false,
@@ -42,7 +42,7 @@ function Routes() {
                 }}
             />
             <Tab.Screen 
-                name="Perfil"
+                name="Profile"
                 component={Profile}
                 options={{
                     headerShown: false,
@@ -59,7 +59,7 @@ function Routes() {
     );
 }
 
-export default Routes;
+
 
 // import React, { useState } from 'react';
 // import { Button, Image, View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';

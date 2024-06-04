@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';  // Import atualizado
 
-const MinhaComponente = () => {
+export function Profile () {
   const [image, setImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -19,10 +19,10 @@ const MinhaComponente = () => {
   const [tempOng, setTempOng] = useState('');
 
   let [fontsLoaded] = useFonts({
-    'Poppins-Bold': require('../../assets/Poppins/Poppins-Bold.ttf'),
-    'Poppins-Regular': require('../../assets/Poppins/Poppins-Regular.ttf'),
-    'Poppins-Semi': require('../../assets/Poppins/Poppins-SemiBold.ttf'),
-    'Poppins-Medium': require('../../assets/Poppins/Poppins-Medium.ttf'),
+    'Poppins-Bold': require('../assets/Poppins/Poppins-Bold.ttf'),
+    'Poppins-Regular': require('../assets/Poppins/Poppins-Regular.ttf'),
+    'Poppins-Semi': require('../assets/Poppins/Poppins-SemiBold.ttf'),
+    'Poppins-Medium': require('../assets/Poppins/Poppins-Medium.ttf'),
   });
 
   useEffect(() => {
@@ -154,18 +154,18 @@ const MinhaComponente = () => {
   }
 
   return (
-    <ImageBackground source={backgroundImage ? { uri: backgroundImage } : require('../../assets/billie.png')} style={styles.backgroundImage}>
+    <ImageBackground source={backgroundImage ? { uri: backgroundImage } : require('../assets/billie.png')} style={styles.backgroundImage}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
             {image ? (
               <Image source={{ uri: image }} style={styles.image} />
             ) : (
-              <Image source={require('../../assets/billie2.png')} style={styles.overlayImage} />
+              <Image source={require('../assets/billie2.png')} style={styles.overlayImage} />
             )}
             <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
               <Image
-                source={require('../../assets/editar.png')}
+                source={require('../assets/editar.png')}
                 style={styles.editButtonImage}
               />
             </TouchableOpacity>
@@ -208,7 +208,7 @@ const MinhaComponente = () => {
                   {ongsDoadas.map((ong, index) => (
                     <TouchableOpacity key={index} onPress={() => handleOngsDoadasPress(index)} style={styles.ongItem}>
                       <Image
-                        source={require('../../assets/arrow.png')}
+                        source={require('../assets/arrow.png')}
                         style={styles.arrowIcon}
                       />
                       <Text style={styles.categoryValue}>{ong}</Text>
@@ -517,6 +517,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default MinhaComponente;
 
 

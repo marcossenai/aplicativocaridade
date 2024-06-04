@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
 
-const Index = ({ navigation }) => {
+export function Index () {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [city, setCity] = useState(null);
@@ -57,7 +57,7 @@ const Index = ({ navigation }) => {
       <TouchableOpacity style={styles.searchButton}>
         <Text style={styles.searchButtonText}>Explorar organizações parceiras</Text>
       </TouchableOpacity>
-      <Image source={require('../../assets/maosDadas.png')} style={styles.mainImage} />
+      <Image source={require('../assets/maosDadas.png')} style={styles.mainImage} />
       <View style={styles.categoriesContainer}>
         <TouchableOpacity style={styles.categoryButton}>
           <Text style={styles.categoryText}>Alimentos</Text>
@@ -217,4 +217,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Index;
+
